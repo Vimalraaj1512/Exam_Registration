@@ -189,3 +189,99 @@ form.addEventListener("submit", function (e) {
     displayStudents();
 
 });
+/* Display Students */
+
+function displayStudents() {
+
+    let registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+
+    tableBody.innerHTML = "";
+
+    if (registrations.length === 0) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5">No registrations found.</td>
+            </tr>
+        `;
+
+        document.getElementById("totalStudents").textContent = 0;
+        return;
+    }
+
+    document.getElementById("totalStudents").textContent = registrations.length;
+
+    registrations.forEach((student, index) => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>${student.name}</td>
+
+            <td>${student.email}</td>
+
+            <td>${student.phone}</td>
+
+            <td>${student.exam}</td>
+
+            <td>
+                <button
+                    class="deleteBtn"
+                    onclick="deleteStudent(${index})">
+                    Delete
+                </button>
+            </td>
+
+        `;
+
+        tableBody.appendChild(row);
+
+    });
+
+}
+
+/* Delete Student */
+
+function deleteStudent(index) {
+
+    let registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+
+    if(confirm("Delete this registration?")){
+
+        registrations.splice(index,1);
+
+        localStorage.setItem(
+            "registrations",
+            JSON.stringify(registrations)
+        );
+
+        displayStudents();
+
+    }
+
+}
+
+/* Clear All Registrations */
+
+function clearAllStudents(){
+
+    if(confirm("Delete all registrations?")){
+
+        localStorage.removeItem("registrations");
+
+        displayStudents();
+
+        document.getElementById("successMessage").textContent =
+        "All registrations deleted.";
+
+    }
+
+}
+
+displayStudents();
+
+</script>
+
+</body>
+</html>
